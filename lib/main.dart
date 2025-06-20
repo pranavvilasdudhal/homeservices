@@ -25,15 +25,15 @@ class _HomeServicesAppState extends State<HomeServicesApp> {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: Scaffold(
         body: _screens[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (i) => setState(() => _selectedIndex = i),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Bookings'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //   currentIndex: _selectedIndex,
+        //   onTap: (i) => setState(() => _selectedIndex = i),
+        //   items: const [
+        //     BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        //     BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Bookings'),
+        //     BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        //   ],
+        // ),
       ),
     );
   }
