@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/api_service.dart';
 import '../models/category_model.dart';
+import 'categorydetail.dart';
 
 List<Map<String, String>> services = [
   {
@@ -76,7 +77,6 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // 🔍 Banner + Search
             Container(
               padding: EdgeInsets.all(16),
               color: Colors.orange[100],
@@ -97,7 +97,6 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-
 
             Container(
               height: 120,
@@ -138,9 +137,7 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            
 
-            // 🔄 API Fetched Categories
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Column(
@@ -165,9 +162,19 @@ class _HomePageState extends State<HomePage> {
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
                           children: snapshot.data!.data.map((category) {
-                            return categoryItem(
-                              _getIconForCategory(category.name),
-                              category.name,
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CategoryDetailPage(category: category),
+                                  ),
+                                );
+                              },
+                              child: categoryItem(
+                                _getIconForCategory(category.name),
+                                category.name,
+                              ),
                             );
                           }).toList(),
                         );
@@ -183,7 +190,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /// Get dynamic icon based on category name
   IconData _getIconForCategory(String categoryName) {
     switch (categoryName.toLowerCase()) {
       case 'home service':
@@ -197,7 +203,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  /// Category Item Widget
   Widget categoryItem(IconData icon, String title) {
     return Container(
       decoration: BoxDecoration(
