@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../models/api_service.dart';
+import '../models/category_model.dart';
 
 List<Map<String, String>> services = [
   {
@@ -29,6 +31,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ApiService _apiService = ApiService();
+  late Future<CategoryResponse> _futureCategories;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureCategories = _apiService.fetchCategories();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,29 +66,17 @@ class _HomePageState extends State<HomePage> {
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
         currentIndex: 0,
-        onTap: (index) {
-          // Handle navigation tap
-        },
+        onTap: (index) {},
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'Bookings',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Bookings'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Banner and Search
+            // 🔍 Banner + Search
             Container(
               padding: EdgeInsets.all(16),
               color: Colors.orange[100],
@@ -98,6 +97,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+
 
             Container(
               height: 120,
@@ -138,51 +138,66 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
+            
 
-            // Categories Grid
+            // 🔄 API Fetched Categories
             Padding(
-              padding: EdgeInsets.all(12),
-              child: GridView.count(
-                crossAxisCount: 3,
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  categoryItem(Icons.cleaning_services, 'Home Cleaning'),
-                  categoryItem(Icons.car_repair, 'Car Services'),
-                  categoryItem(Icons.electrical_services, 'Electrical '),
+                  Text("More Services", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10),
+                  FutureBuilder<CategoryResponse>(
+                    future: _futureCategories,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError) {
+                        return Text("Error loading categories");
+                      } else if (!snapshot.hasData || snapshot.data!.data.isEmpty) {
+                        return Text("No categories available");
+                      } else {
+                        return GridView.count(
+                          crossAxisCount: 3,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          children: snapshot.data!.data.map((category) {
+                            return categoryItem(
+                              _getIconForCategory(category.name),
+                              category.name,
+                            );
+                          }).toList(),
+                        );
+                      }
+                    },
+                  ),
                 ],
               ),
             ),
-
-            // Offers & Cards
-            offerCard(),
-            horizontalServiceScroll("Home Cleaning Services", [
-              'Bathroom Cleaning', 'Kitchen Cleaning', 'Sofa Cleaning', 'Carpet Cleaning'
-            ]),
-
-            // gridServices("Popular Services", [
-            //   'Packers & Movers', 'Home Painting', 'Home Renovation', 'Wall Panelling'
-            // ]),
-
-            vipCard(),
-            spotlightSection(),
-            horizontalServiceScroll("Home Repair Services", [
-              'Tap Repair', 'Switch Board', 'Geyser Repair'
-            ]),
-
-            relocationSection(),
-            customerReviews(),
-            faqSection(),
           ],
         ),
       ),
     );
   }
 
+  /// Get dynamic icon based on category name
+  IconData _getIconForCategory(String categoryName) {
+    switch (categoryName.toLowerCase()) {
+      case 'home service':
+        return Icons.home;
+      case 'car service':
+        return Icons.directions_car;
+      case 'electronic service':
+        return Icons.electrical_services;
+      default:
+        return Icons.category;
+    }
+  }
 
+  /// Category Item Widget
   Widget categoryItem(IconData icon, String title) {
     return Container(
       decoration: BoxDecoration(
@@ -195,316 +210,15 @@ class _HomePageState extends State<HomePage> {
         children: [
           Icon(icon, size: 30, color: Colors.deepPurple),
           SizedBox(height: 8),
-          Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 12)),
-        ],
-      ),
-    );
-  }
-
-  Widget offerCard() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
-    );
-  }
-
-  Widget horizontalServiceScroll(String title, List<String> services) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        ),
-
-        Container(
-          child: Column(
-            children: [
-              Padding(padding: EdgeInsets.all(10)),
-              Text("Shop by Categories"),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.35"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.50"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      child: Column(
-                        children: [
-                          Image.asset(
-                            "assets/images/image-1.png",
-                            height: 100,
-                            width: 100,
-                            alignment: FractionalOffset.centerRight,
-                          ),
-                          Text("fresh"),
-                          Text("Rs.25"),
-                          ElevatedButton(
-                            onPressed: () {
-                              print("Add to Cart");
-                            },
-                            child: Text("Add to Cart"),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-
-      ],
-    );
-  }
-
-  Widget gridServices(String title, List<String> services) {
-    return Padding(
-      padding: EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            children: services.map((service) => Container(
-              padding: EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 4)],
-              ),
-              child: Text(service, style: TextStyle(fontSize: 14)),
-            )).toList(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget vipCard() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Container(
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.black87,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Text("VIP Membership - ₹199/year. 15% off on all services!",
-            style: TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-
-  Widget spotlightSection() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Container(
-        height: 10,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: NetworkImage('https://via.placeholder.com/300x150'),
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget relocationSection() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Text("Relocation Simplified", style: TextStyle(fontWeight: FontWeight.bold)),
-    );
-  }
-
-  Widget customerReviews() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Customer Reviews", style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 8),
-          Container(
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 12),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-            child: Text("Home Cleaning was smooth and affordable!"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget faqSection() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text("Frequently Asked Questions", style: TextStyle(fontWeight: FontWeight.bold)),
-          ExpansionTile(
-            title: Text("How to book a service?"),
-            children: [Text("You can book via app easily with just 3 steps")],
-          ),
-          ExpansionTile(
-            title: Text("Is there a refund policy?"),
-            children: [Text("Yes, within 24 hours after service.")],
           ),
         ],
       ),
