@@ -1,30 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/api_service.dart';
-import '../models/category_model.dart';
-import 'categorydetail.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-List<Map<String, String>> services = [
-  {
-    'title': 'Bathroom Cleaning',
-    'image': 'assets/images/image-1.png',
-  },
-  {
-    'title': 'Kitchen Cleaning',
-    'image': 'assets/images/im2.jpg',
-  },
-  {
-    'title': 'Premium Cleaning',
-    'image': 'assets/images/im3.jpg',
-  },
-  {
-    'title': 'Sofa Cleaning',
-    'image': 'assets/images/im4.jpg',
-  },
-  {
-    'title': 'Carpet Cleaning',
-    'image': 'assets/images/im5.jpg',
-  },
-];
+import 'categorydetail.dart';
+// ✅ Import the subcategory page
 
 class HomePage extends StatefulWidget {
   @override
@@ -32,20 +11,104 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final ApiService _apiService = ApiService();
-  late Future<CategoryResponse> _futureCategories;
+  List<dynamic> _categories = [];
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    _futureCategories = _apiService.fetchCategories();
+    fetchCategories();
+  }
+
+  Future<void> fetchCategories() async {
+    final url = Uri.parse("http://192.168.189.212:8000/api/cat");
+
+    try {
+      final response = await http.get(url).timeout(Duration(seconds: 5));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if (data['status'] == true && data['data'] != null) {
+          setState(() {
+            _categories = data['data'];
+            _hasError = false;
+          });
+        } else {
+          setState(() => _hasError = true);
+        }
+      } else {
+        setState(() => _hasError = true);
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() => _hasError = true);
+      print('Error fetching categories: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  IconData _getIconForCategory(String name) {
+    switch (name.toLowerCase()) {
+      case 'home service':
+        return Icons.home;
+      case 'car service':
+        return Icons.directions_car;
+      case 'electronic service':
+        return Icons.electrical_services;
+      default:
+        return Icons.category;
+    }
+  }
+
+  Widget categoryItem(int id, String name) {
+    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SubCategoryPage(
+                categoryId: id,
+                categoryName: name,
+              ),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(_getIconForCategory(name), size: 30, color: Colors.deepPurple),
+              SizedBox(height: 10),
+              Text(
+                name,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100],
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 1,
         title: Row(
           children: [
             Icon(Icons.home_repair_service, color: Colors.orange),
@@ -53,8 +116,6 @@ class _HomePageState extends State<HomePage> {
             Text("NOBROKER", style: TextStyle(color: Colors.black)),
           ],
         ),
-        backgroundColor: Colors.white,
-        elevation: 1,
         actions: [
           TextButton.icon(
             onPressed: () {},
@@ -74,158 +135,71 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              color: Colors.orange[100],
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("HEATWAVE Indoors?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 8),
-                  TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Search Washing Machine...',
-                      prefixIcon: Icon(Icons.search),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                      filled: true,
-                      fillColor: Colors.white,
-                    ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16),
+                  color: Colors.orange[100],
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("HEATWAVE Indoors?",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 8),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search Washing Machine...',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-
-            Container(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: services.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 4),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: 70,
-                          height: 70,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.teal.shade100),
-                          ),
-                          padding: EdgeInsets.all(8),
-                          child: Image.asset(
-                            services[index]['image']!,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        SizedBox(height: 6),
-                        SizedBox(
-                          width: 80,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("More Services",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      SizedBox(height: 10),
+                      if (_hasError)
+                        Center(
                           child: Text(
-                            services[index]['title']!,
-                            style: TextStyle(fontSize: 12),
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
+                            "Failed to fetch categories",
+                            style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("More Services", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 10),
-                  FutureBuilder<CategoryResponse>(
-                    future: _futureCategories,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
-                      } else if (snapshot.hasError) {
-                        return Text("Error loading categories");
-                      } else if (!snapshot.hasData || snapshot.data!.data.isEmpty) {
-                        return Text("No categories available");
-                      } else {
-                        return GridView.count(
+                        )
+                      else if (_categories.isEmpty)
+                        Center(child: CircularProgressIndicator())
+                      else
+                        GridView.count(
                           crossAxisCount: 3,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
                           crossAxisSpacing: 10,
                           mainAxisSpacing: 10,
-                          children: snapshot.data!.data.map((category) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CategoryDetailPage(category: category),
-                                  ),
-                                );
-                              },
-                              child: categoryItem(
-                                _getIconForCategory(category.name),
-                                category.name,
-                              ),
-                            );
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          children: _categories.map<Widget>((category) {
+                            final id = category['id'] ?? 0; // fallback to 0 if null
+                            final name = category['name'] ?? 'No Name';
+                            return categoryItem(id, name);
                           }).toList(),
-                        );
-                      }
-                    },
+
+                        ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconData _getIconForCategory(String categoryName) {
-    switch (categoryName.toLowerCase()) {
-      case 'home service':
-        return Icons.home;
-      case 'car service':
-        return Icons.directions_car;
-      case 'electronic service':
-        return Icons.electrical_services;
-      default:
-        return Icons.category;
-    }
-  }
-
-  Widget categoryItem(IconData icon, String title) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 4)],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 30, color: Colors.deepPurple),
-          SizedBox(height: 8),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 12),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
     );
   }
