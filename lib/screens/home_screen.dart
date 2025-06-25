@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 
 import 'categorydetail.dart';
 // ✅ Import the subcategory page
@@ -150,17 +152,34 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        onTap: (index) {},
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Bookings'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
+      bottomNavigationBar: CurvedNavigationBar(
+        height: 65,
+        backgroundColor: Colors.white,
+        color: Colors.black,
+        animationDuration: Duration(milliseconds: 500),
+        // onTap: (int index){
+        //   setState(() {
+        //     currentTabIndex=index;
+        //   });
+        // },
+        items: [
+          Icon(
+            Icons.home_outlined,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.shopping_bag_outlined,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.wallet_outlined,
+            color: Colors.white,
+          ),
+          Icon(
+            Icons.person_outline,
+            color: Colors.white,
+          ),
+        ],),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
