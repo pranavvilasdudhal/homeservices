@@ -24,7 +24,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   }
 
   Future<void> fetchSubCategories() async {
-    final url = Uri.parse('http://192.168.189.212:8000/api/subcategories?cat_id=${widget.categoryId}');
+    final url = Uri.parse('http://192.168.137.1:8000/api/subcategories?cat_id=${widget.categoryId}');
 
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 5));

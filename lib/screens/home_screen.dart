@@ -5,6 +5,29 @@ import 'dart:convert';
 import 'categorydetail.dart';
 // ✅ Import the subcategory page
 
+List<Map<String, String>> services = [
+  {
+    'title': 'Bathroom Cleaning',
+    'image': 'assets/images/image-1.png',
+  },
+  {
+    'title': 'Kitchen Cleaning',
+    'image': 'assets/images/im2.jpg',
+  },
+  {
+    'title': 'Premium Cleaning',
+    'image': 'assets/images/im3.jpg',
+  },
+  {
+    'title': 'Sofa Cleaning',
+    'image': 'assets/images/im4.jpg',
+  },
+  {
+    'title': 'Carpet Cleaning',
+    'image': 'assets/images/im5.jpg',
+  },
+];
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -20,11 +43,13 @@ class _HomePageState extends State<HomePage> {
     fetchCategories();
   }
 
+
+
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.189.212:8000/api/cat");
+    final url = Uri.parse("http://192.168.137.1:8000/api/cat");
 
     try {
-      final response = await http.get(url).timeout(Duration(seconds: 5));
+      final response = await http.get(url).timeout(Duration(seconds: 15));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -62,6 +87,7 @@ class _HomePageState extends State<HomePage> {
         return Icons.category;
     }
   }
+
 
   Widget categoryItem(int id, String name) {
     return Card(
@@ -160,6 +186,46 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ],
+                  ),
+                ),
+
+                Container(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 4),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.teal.shade100),
+                              ),
+                              padding: EdgeInsets.all(8),
+                              child: Image.asset(
+                                services[index]['image']!,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            SizedBox(height: 6),
+                            SizedBox(
+                              width: 80,
+                              child: Text(
+                                services[index]['title']!,
+                                style: TextStyle(fontSize: 12),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Padding(
