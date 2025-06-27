@@ -46,9 +46,8 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.137.1:8000/api/cat");
+    final url = Uri.parse("http://192.168.1.16:8000/api/cat");
 
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
@@ -107,6 +106,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
+
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 8),
@@ -272,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
                           children: _categories.map<Widget>((category) {
-                            final id = category['id'] ?? 0; // fallback to 0 if null
+                            final id = category['category_id'] ?? 0; // fallback to 0 if null
                             final name = category['name'] ?? 'No Name';
                             return categoryItem(id, name);
                           }).toList(),
