@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.1.16:8000/api/cat");
+    final url = Uri.parse("http://192.168.1.50:8000/api/cat");
 
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
