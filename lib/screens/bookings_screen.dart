@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: BookingForm(),
-    ),
-  );
-}
+// void main() {
+//   runApp(
+//     MaterialApp(
+//       home: BookingForm(),
+//     ),
+//   );
+// }
 
 class BookingForm extends StatefulWidget {
   @override

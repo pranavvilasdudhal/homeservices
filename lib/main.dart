@@ -23,6 +23,7 @@ class _HomeServicesAppState extends State<HomeServicesApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Home Services App',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: Scaffold(
