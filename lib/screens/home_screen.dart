@@ -7,11 +7,16 @@ import 'package:untitled/screens/profile_page.dart';
 import '../screens/categorydetail.dart';
 
 List<Map<String, String>> services = [
-  {'title': 'Bathroom Cleaning', 'image': 'assets/images/image-1.png'},
-  {'title': 'Kitchen Cleaning', 'image': 'assets/images/im2.jpg'},
-  {'title': 'Premium Cleaning', 'image': 'assets/images/im3.jpg'},
-  {'title': 'Sofa Cleaning', 'image': 'assets/images/im4.jpg'},
-  {'title': 'Carpet Cleaning', 'image': 'assets/images/im5.jpg'},
+  {'title': 'Bathroom Cleaning',
+    'image': 'assets/images/image-1.png'},
+  {'title': 'Kitchen Cleaning',
+    'image': 'assets/images/im2.jpg'},
+  {'title': 'Premium Cleaning',
+    'image': 'assets/images/im3.jpg'},
+  {'title': 'Sofa Cleaning',
+    'image': 'assets/images/im4.jpg'},
+  {'title': 'Carpet Cleaning',
+    'image': 'assets/images/im5.jpg'},
 ];
 
 class HomePage extends StatefulWidget {
@@ -38,7 +43,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.1.50:8000/api/cat");
+    final url = Uri.parse("http://192.168.1.49:8000/api/cat");
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
