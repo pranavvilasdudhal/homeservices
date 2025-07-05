@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:untitled/screens/bookings_screen.dart';
+import 'package:untitled/screens/cart_page.dart';
 import 'package:untitled/screens/profile_page.dart';
 import '../screens/categorydetail.dart';
 
@@ -25,11 +26,12 @@ class _HomePageState extends State<HomePage> {
   bool _hasError = false;
 
   final List<Widget> _pages = [
-    const Center(child: Text("🏠 Home Page Content")),
-    BookingForm(),
-    const Center(child: Text("💳 cart Page")),
-    ProfilePage(),
+    const Center(child: Text("🏠 Home Page Content")), // Index 0
+    BookingForm(),                                     // Index 1
+    CartScreen(),                                      // Index 2
+    ProfilePage(),                                     // Index 3
   ];
+
 
   @override
   void initState() {
@@ -37,8 +39,13 @@ class _HomePageState extends State<HomePage> {
     fetchCategories();
   }
 
+<<<<<<< HEAD
+  Future<void> fetchCategories() async {
+    final url = Uri.parse("http://192.168.1.14:8000/api/cat");
+=======
     Future<void> fetchCategories() async {
     final url = Uri.parse("http://192.168.189.213:8000/api/cat");
+>>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
@@ -585,9 +592,390 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
+<<<<<<< HEAD
+
+                Container(
+                  height: 30,
+                ),
+
+                Container(
+                  child: Column(
+                    children: [
+                      Image.asset("assets/images/im6.png",
+                        fit: BoxFit.cover, // Add fit property for better image rendering
+                        width: double.infinity, // Set image width to full container width
+                        height: 150, // Set image height
+                      ),
+                    ],
+                  ),
+                ),
+
+
+
+                const SizedBox(height: 35),
+
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im8.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('AirIndia Flights', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('From ₹1,299', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im9.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Biggest Price Drop', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im12.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Car Mechanic', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im13.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Ac Repair vala', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Add more cards below following the same pattern...
+                  ],
+                ),
+
+                Container(
+                  child: Column(
+                    children: [
+                      Padding(padding: EdgeInsets.all(10)),
+                      Text("Shop by Categories"),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/im14.jpg",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.35"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.50"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/im15.jpg",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment: FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 30,
+                      ),
+
+                      Container(
+                        child: Column(
+                          children: [
+                            Image.asset("assets/images/im6.png",
+                              fit: BoxFit.cover, // Add fit property for better image rendering
+                              width: double.infinity, // Set image width to full container width
+                              height: 150, // Set image height
+                            ),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 35),
+
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im8.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('AirIndia Flights', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('From ₹1,299', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im9.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Biggest Price Drop', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im12.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Car Mechanic', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im13.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Ac Repair vala', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Add more cards below following the same pattern...
+                  ],
+                )
+
+
+              ],
+            ),
+          ),
+        ),
+      )
+          :
+      _pages[_selectedIndex],
+=======
               ),
             )
           : _pages[_selectedIndex],
+>>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
     );
   }//home page
 }
