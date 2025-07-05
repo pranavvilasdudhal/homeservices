@@ -4,13 +4,13 @@ import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../screens/categorydetail.dart';
 
-// void main() {
-//   runApp(
-//     MaterialApp(
-//       home: HomePage(),
-//     ),
-//   );
-// }
+void main() {
+  runApp(
+    MaterialApp(
+      home: HomePage(),
+    ),
+  );
+}
 
 List<Map<String, String>> services = [
   {

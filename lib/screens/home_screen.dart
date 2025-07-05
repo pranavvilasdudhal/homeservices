@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:untitled/screens/bookings_screen.dart';
+import 'package:untitled/screens/cart_page.dart';
 import 'package:untitled/screens/profile_page.dart';
 import '../screens/categorydetail.dart';
 
@@ -30,11 +31,12 @@ class _HomePageState extends State<HomePage> {
   bool _hasError = false;
 
   final List<Widget> _pages = [
-    const Center(child: Text("🏠 Home Page Content")),
-    BookingForm(),
-    const Center(child: Text("💳 cart Page")),
-    ProfilePage(),
+    const Center(child: Text("🏠 Home Page Content")), // Index 0
+    BookingForm(),                                     // Index 1
+    CartScreen(),                                      // Index 2
+    ProfilePage(),                                     // Index 3
   ];
+
 
   @override
   void initState() {
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.1.49:8000/api/cat");
+    final url = Uri.parse("http://192.168.1.14:8000/api/cat");
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
@@ -276,6 +278,113 @@ class _HomePageState extends State<HomePage> {
                         ),
                     ],
                   ),
+                ),
+
+                Container(
+                  height: 30,
+                ),
+
+                Container(
+                  child: Column(
+                    children: [
+                      Image.asset("assets/images/im6.png",
+                        fit: BoxFit.cover, // Add fit property for better image rendering
+                        width: double.infinity, // Set image width to full container width
+                        height: 150, // Set image height
+                      ),
+                    ],
+                  ),
+                ),
+
+
+
+                const SizedBox(height: 35),
+
+                GridView.count(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  children: [
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im8.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('AirIndia Flights', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('From ₹1,299', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im9.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Biggest Price Drop', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im12.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Car Mechanic', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Card(
+                      elevation: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset('assets/images/im13.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('Ac Repair vala', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Add more cards below following the same pattern...
+                  ],
                 ),
 
                 Container(
