@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:untitled/screens/bookings_screen.dart';
-import 'package:untitled/screens/cart_page.dart';
 import 'package:untitled/screens/profile_page.dart';
 import '../screens/categorydetail.dart';
 
@@ -26,12 +25,11 @@ class _HomePageState extends State<HomePage> {
   bool _hasError = false;
 
   final List<Widget> _pages = [
-    const Center(child: Text("🏠 Home Page Content")), // Index 0
-    BookingForm(),                                     // Index 1
-    CartScreen(),                                      // Index 2
-    ProfilePage(),                                     // Index 3
+    const Center(child: Text("🏠 Home Page Content")),
+    BookingForm(),
+    const Center(child: Text("💳 cart Page")),
+    ProfilePage(),
   ];
-
 
   @override
   void initState() {
@@ -39,13 +37,8 @@ class _HomePageState extends State<HomePage> {
     fetchCategories();
   }
 
-<<<<<<< HEAD
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.1.14:8000/api/cat");
-=======
-    Future<void> fetchCategories() async {
     final url = Uri.parse("http://192.168.189.213:8000/api/cat");
->>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
@@ -179,526 +172,114 @@ class _HomePageState extends State<HomePage> {
       // ✅ Main Body based on selected index
       body: _selectedIndex == 0
           ? SafeArea(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 20.0),
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        color: Colors.orange[100],
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("HEATWAVE Indoors?",
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 8),
-                            TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search Washing Machine...',
-                                prefixIcon: const Icon(Icons.search),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10)),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // 🔄 Service Horizontal List
-                      Container(
-                        height: 120,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: services.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 12, right: 4),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          color: Colors.teal.shade100),
-                                    ),
-                                    padding: const EdgeInsets.all(8),
-                                    child: Image.asset(
-                                      services[index]['image']!,
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  SizedBox(
-                                    width: 80,
-                                    child: Text(
-                                      services[index]['title']!,
-                                      style: const TextStyle(fontSize: 12),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      // 🔽 Categories Grid
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text("More Services",
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 10),
-                            if (_hasError)
-                              const Center(
-                                child: Text(
-                                  "Failed to fetch categories",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )
-                            else if (_categories.isEmpty)
-                              const Center(child: CircularProgressIndicator())
-                            else
-                              GridView.count(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                children: _categories.map<Widget>((category) {
-                                  final id = category['category_id'] ?? 0;
-                                  final name = category['name'] ?? 'No Name';
-                                  return categoryItem(id, name);
-                                }).toList(),
-                              ),
-                          ],
-                        ),
-                      ),
-
-                      Container(
-                        child: Column(
-                          children: [
-                            Padding(padding: EdgeInsets.all(10)),
-                            Text("Shop by Categories"),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: [
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/im14.jpg",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.35"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/image-1.png",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.50"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/im15.jpg",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.25"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/image-1.png",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.25"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/image-1.png",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.25"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/image-1.png",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.25"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Card(
-                                    child: Column(
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/image-1.png",
-                                          height: 100,
-                                          width: 100,
-                                          alignment:
-                                              FractionalOffset.centerRight,
-                                        ),
-                                        Text("fresh"),
-                                        Text("Rs.25"),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            print("Add to Cart");
-                                          },
-                                          child: Text("Add to Cart"),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              height: 30,
-                            ),
-                            Container(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/im6.png",
-                                    fit: BoxFit
-                                        .cover, // Add fit property for better image rendering
-                                    width: double
-                                        .infinity, // Set image width to full container width
-                                    height: 150, // Set image height
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 35),
-
-                      GridView.count(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 10,
-                        mainAxisSpacing: 10,
-                        children: [
-                          Card(
-                            elevation: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/images/im8.jpg',
-                                    fit: BoxFit.cover,
-                                    height: 100,
-                                    width: double.infinity),
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('AirIndia Flights',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      Text('From ₹1,299',
-                                          style:
-                                              TextStyle(color: Colors.green)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Card(
-                            elevation: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/images/im9.jpg',
-                                    fit: BoxFit.cover,
-                                    height: 100,
-                                    width: double.infinity),
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Biggest Price Drop',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      Text('Just ₹699',
-                                          style:
-                                              TextStyle(color: Colors.green)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Card(
-                            elevation: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/images/im12.jpg',
-                                    fit: BoxFit.cover,
-                                    height: 100,
-                                    width: double.infinity),
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Car Mechanic',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      Text('Just ₹699',
-                                          style:
-                                              TextStyle(color: Colors.green)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Card(
-                            elevation: 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset('assets/images/im13.jpg',
-                                    fit: BoxFit.cover,
-                                    height: 100,
-                                    width: double.infinity),
-                                Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('Ac Repair vala',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold)),
-                                      Text('Just ₹699',
-                                          style:
-                                              TextStyle(color: Colors.green)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Add more cards below following the same pattern...
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-<<<<<<< HEAD
-
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 20.0),
+            child: Column(
+              children: [
                 Container(
-                  height: 30,
-                ),
-
-                Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.orange[100],
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset("assets/images/im6.png",
-                        fit: BoxFit.cover, // Add fit property for better image rendering
-                        width: double.infinity, // Set image width to full container width
-                        height: 150, // Set image height
+                      const Text("HEATWAVE Indoors?",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 8),
+                      TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Search Washing Machine...',
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
                       ),
                     ],
                   ),
                 ),
 
+                // 🔄 Service Horizontal List
+                Container(
+                  height: 120,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: services.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding:
+                        const EdgeInsets.only(left: 12, right: 4),
+                        child: Column(
+                          children: [
+                            Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                    color: Colors.teal.shade100),
+                              ),
+                              padding: const EdgeInsets.all(8),
+                              child: Image.asset(
+                                services[index]['image']!,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            SizedBox(
+                              width: 80,
+                              child: Text(
+                                services[index]['title']!,
+                                style: const TextStyle(fontSize: 12),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ),
 
-
-                const SizedBox(height: 35),
-
-                GridView.count(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  children: [
-                    Card(
-                      elevation: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset('assets/images/im8.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('AirIndia Flights', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('From ₹1,299', style: TextStyle(color: Colors.green)),
-                              ],
-                            ),
+                // 🔽 Categories Grid
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("More Services",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                      if (_hasError)
+                        const Center(
+                          child: Text(
+                            "Failed to fetch categories",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold),
                           ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      elevation: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset('assets/images/im9.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Biggest Price Drop', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      elevation: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset('assets/images/im12.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Car Mechanic', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Card(
-                      elevation: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset('assets/images/im13.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
-                          Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Ac Repair vala', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    // Add more cards below following the same pattern...
-                  ],
+                        )
+                      else if (_categories.isEmpty)
+                        const Center(child: CircularProgressIndicator())
+                      else
+                        GridView.count(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: _categories.map<Widget>((category) {
+                            final id = category['category_id'] ?? 0;
+                            final name = category['name'] ?? 'No Name';
+                            return categoryItem(id, name);
+                          }).toList(),
+                        ),
+                    ],
+                  ),
                 ),
 
                 Container(
@@ -717,7 +298,8 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/im14.jpg",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.35"),
@@ -737,7 +319,8 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/image-1.png",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.50"),
@@ -757,7 +340,8 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/im15.jpg",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.25"),
@@ -777,7 +361,8 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/image-1.png",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.25"),
@@ -797,28 +382,8 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/image-1.png",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
-                                  ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      print("Add to Cart");
-                                    },
-                                    child: Text("Add to Cart"),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            Card(
-                              child: Column(
-                                children: [
-                                  Image.asset(
-                                    "assets/images/image-1.png",
-                                    height: 100,
-                                    width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.25"),
@@ -838,7 +403,29 @@ class _HomePageState extends State<HomePage> {
                                     "assets/images/image-1.png",
                                     height: 100,
                                     width: 100,
-                                    alignment: FractionalOffset.centerRight,
+                                    alignment:
+                                    FractionalOffset.centerRight,
+                                  ),
+                                  Text("fresh"),
+                                  Text("Rs.25"),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      print("Add to Cart");
+                                    },
+                                    child: Text("Add to Cart"),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Card(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    "assets/images/image-1.png",
+                                    height: 100,
+                                    width: 100,
+                                    alignment:
+                                    FractionalOffset.centerRight,
                                   ),
                                   Text("fresh"),
                                   Text("Rs.25"),
@@ -857,19 +444,20 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         height: 30,
                       ),
-
                       Container(
                         child: Column(
                           children: [
-                            Image.asset("assets/images/im6.png",
-                              fit: BoxFit.cover, // Add fit property for better image rendering
-                              width: double.infinity, // Set image width to full container width
+                            Image.asset(
+                              "assets/images/im6.png",
+                              fit: BoxFit
+                                  .cover, // Add fit property for better image rendering
+                              width: double
+                                  .infinity, // Set image width to full container width
                               height: 150, // Set image height
                             ),
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),
@@ -888,14 +476,22 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset('assets/images/im8.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Image.asset('assets/images/im8.jpg',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: double.infinity),
                           Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
-                                Text('AirIndia Flights', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('From ₹1,299', style: TextStyle(color: Colors.green)),
+                                Text('AirIndia Flights',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                Text('From ₹1,299',
+                                    style:
+                                    TextStyle(color: Colors.green)),
                               ],
                             ),
                           ),
@@ -907,14 +503,22 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset('assets/images/im9.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Image.asset('assets/images/im9.jpg',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: double.infinity),
                           Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
-                                Text('Biggest Price Drop', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                                Text('Biggest Price Drop',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                Text('Just ₹699',
+                                    style:
+                                    TextStyle(color: Colors.green)),
                               ],
                             ),
                           ),
@@ -926,14 +530,22 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset('assets/images/im12.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Image.asset('assets/images/im12.jpg',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: double.infinity),
                           Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
-                                Text('Car Mechanic', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                                Text('Car Mechanic',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                Text('Just ₹699',
+                                    style:
+                                    TextStyle(color: Colors.green)),
                               ],
                             ),
                           ),
@@ -945,14 +557,22 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.asset('assets/images/im13.jpg', fit: BoxFit.cover, height: 100, width: double.infinity),
+                          Image.asset('assets/images/im13.jpg',
+                              fit: BoxFit.cover,
+                              height: 100,
+                              width: double.infinity),
                           Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
                               children: [
-                                Text('Ac Repair vala', style: TextStyle(fontWeight: FontWeight.bold)),
-                                Text('Just ₹699', style: TextStyle(color: Colors.green)),
+                                Text('Ac Repair vala',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                                Text('Just ₹699',
+                                    style:
+                                    TextStyle(color: Colors.green)),
                               ],
                             ),
                           ),
@@ -962,20 +582,12 @@ class _HomePageState extends State<HomePage> {
                     // Add more cards below following the same pattern...
                   ],
                 )
-
-
               ],
             ),
           ),
         ),
       )
-          :
-      _pages[_selectedIndex],
-=======
-              ),
-            )
           : _pages[_selectedIndex],
->>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
     );
   }//home page
 }

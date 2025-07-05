@@ -23,11 +23,7 @@ class _SubCategoryPageState extends State<SubCategoryPage> {
   bool _isLoading = true;
   bool _hasError = false;
 
-<<<<<<< HEAD
-  final String baseUrl = "http://192.168.1.14:8000";
-=======
   final String baseUrl = "http://192.168.189.213:8000";
->>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
 
   @override
   void initState() {
