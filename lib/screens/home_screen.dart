@@ -39,13 +39,12 @@ class _HomePageState extends State<HomePage> {
     fetchCategories();
   }
 
-<<<<<<< HEAD
   Future<void> fetchCategories() async {
     final url = Uri.parse("http://192.168.1.14:8000/api/cat");
-=======
+
     Future<void> fetchCategories() async {
     final url = Uri.parse("http://192.168.189.213:8000/api/cat");
->>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
+
     try {
       final response = await http.get(url).timeout(Duration(seconds: 15));
       if (response.statusCode == 200) {
@@ -971,11 +970,11 @@ class _HomePageState extends State<HomePage> {
       )
           :
       _pages[_selectedIndex],
-=======
+
               ),
             )
           : _pages[_selectedIndex],
->>>>>>> aadb73a51504449d4a9b54a1c254b34d0758f012
+
     );
   }
 }
