@@ -38,9 +38,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchCategories() async {
-    final url = Uri.parse("http://192.168.189.213:8000/api/cat");
+    final url = Uri.parse("http://192.168.1.21:8000/api/cat");
     try {
-      final response = await http.get(url).timeout(Duration(seconds: 15));
+      final response = await http.get(url).timeout(const Duration(seconds: 15));
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == true && data['data'] != null) {
@@ -99,11 +99,11 @@ class _HomePageState extends State<HomePage> {
             children: [
               Icon(_getIconForCategory(name),
                   size: 30, color: Colors.deepPurple),
-              SizedBox(height: 10),
+             const SizedBox(height: 10),
               Text(
                 name,
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
       color: Colors.transparent,
       elevation: 0,
       child: Padding(
-        padding: EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         child: Icon(icon, color: Colors.white),
       ),
     );
@@ -133,8 +133,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        title: Row(
-          children: const [
+        title: const Row(
+          children:  [
             Icon(Icons.home_repair_service, color: Colors.orange),
             SizedBox(width: 8),
             Text("NOBROKER", style: TextStyle(color: Colors.black)),
@@ -143,8 +143,8 @@ class _HomePageState extends State<HomePage> {
         actions: [
           TextButton.icon(
             onPressed: () {},
-            icon: Icon(Icons.location_on_outlined, color: Colors.black),
-            label: Text("Pune", style: TextStyle(color: Colors.black)),
+            icon: const Icon(Icons.location_on_outlined, color: Colors.black),
+            label: const Text("Pune", style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
@@ -285,8 +285,8 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   child: Column(
                     children: [
-                      Padding(padding: EdgeInsets.all(10)),
-                      Text("Shop by Categories"),
+                      const Padding(padding: EdgeInsets.all(10)),
+                     const Text("Shop by Categories"),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -301,13 +301,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.35"),
+                                  const Text("fresh"),
+                                  const Text("Rs.35"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -322,13 +322,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.50"),
+                                  const Text("fresh"),
+                                 const Text("Rs.50"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -343,13 +343,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
+                                  const Text("fresh"),
+                                  const Text("Rs.25"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -364,13 +364,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
+                                  const Text("fresh"),
+                                  const Text("Rs.25"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -385,13 +385,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
+                                  const Text("fresh"),
+                                  const Text("Rs.25"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -406,13 +406,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
+                                  const Text("fresh"),
+                                  const Text("Rs.25"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -427,13 +427,13 @@ class _HomePageState extends State<HomePage> {
                                     alignment:
                                     FractionalOffset.centerRight,
                                   ),
-                                  Text("fresh"),
-                                  Text("Rs.25"),
+                                  const Text("fresh"),
+                                  const Text("Rs.25"),
                                   ElevatedButton(
                                     onPressed: () {
                                       print("Add to Cart");
                                     },
-                                    child: Text("Add to Cart"),
+                                    child: const Text("Add to Cart"),
                                   ),
                                 ],
                               ),
@@ -466,7 +466,7 @@ class _HomePageState extends State<HomePage> {
 
                 GridView.count(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
@@ -480,7 +480,7 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                               height: 100,
                               width: double.infinity),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment:
@@ -507,7 +507,7 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                               height: 100,
                               width: double.infinity),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment:
@@ -534,7 +534,7 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                               height: 100,
                               width: double.infinity),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment:
@@ -561,7 +561,7 @@ class _HomePageState extends State<HomePage> {
                               fit: BoxFit.cover,
                               height: 100,
                               width: double.infinity),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.all(8),
                             child: Column(
                               crossAxisAlignment:
